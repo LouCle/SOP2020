@@ -1,0 +1,241 @@
+\documentclass[12pt]{article}
+
+% -------------------
+% packages
+% -------------------
+\usepackage{setspace}
+\usepackage[danish]{babel}
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{csquotes}% Recommended
+\usepackage{varwidth}
+\usepackage{verbatim}
+\usepackage{url}
+\usepackage{physics}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{siunitx}
+\usepackage{amssymb}
+\usepackage{accents}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usepackage[danish]{babel}
+\usepackage[margin=3.5cm]{geometry}
+
+\newcommand{\tss}[1]{\textsubscript{#1}}
+
+% -------------------
+% siunitx setup
+% -------------------
+\sisetup{exponent-product = \cdot}
+\newcommand{\s}[1]{~\si{#1}}
+\newcommand{\us}[1]{~\si{\qty[#1]}}
+\newcommand{\kg}{\s{kg}}
+\newcommand{\sek}{\s{s}}
+\newcommand{\met}{\s{m}}
+\newcommand{\metps}{\s{\frac{m}{s}}}
+\newcommand{\newt}{\s{N}}
+\newcommand{\hz}{\s{hz}}
+\newcommand{\radia}{\s{rad}}
+
+% -------------------
+% centerverbatim
+% -------------------
+\newenvironment{centerverbatim}{%
+  \par
+  \centering
+  \varwidth{\linewidth}%
+  \verbatim
+}{%
+  \endverbatim
+  \endvarwidth
+  \par
+}
+
+\usepackage[explicit]{titlesec}
+
+% -------------------
+% biblatex
+% -------------------
+\usepackage[style=authoryear-ibid,backend=biber]{biblatex}
+\bibliography{sample.bib}
+
+% -------------------
+% custom env
+% -------------------
+\usepackage{amsthm}
+%\newtheorem{theorem}{Theorem}
+\newtheorem{theorem}{Theorem}[subsection]
+\newtheorem{corollary}{Korollar}[theorem]
+\theoremstyle{definition}
+\newtheorem{example}{Eksempel}[definition]
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{remark}
+\newtheorem*{remark}{Note}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\renewcommand\qedsymbol{$\blacksquare$}
+%
+
+% -------------------
+% texthøjde
+% -------------------
+\usepackage{setspace}
+\renewcommand{\baselinestretch}{1.5} 
+
+% -------------------
+% box
+% -------------------
+\newcounter{theo}[section]\setcounter{theo}{0}
+\renewcommand{\thetheo}{\arabic{section}.\arabic{theo}}
+\newenvironment{theo}[2][]{%
+  \refstepcounter{theo}%
+  \ifstrempty{#1}%
+  {\mdfsetup{%
+      frametitle={%
+        \tikz[baseline=(current bounding box.east),outer sep=0pt]
+        \node[anchor=east,rectangle,fill=blue!20]
+        {\strut #2};}}
+  }%
+  {\mdfsetup{%
+      frametitle={%
+        \tikz[baseline=(current bounding box.east),outer sep=0pt]
+        \node[anchor=east,rectangle,fill=blue!20]
+        {\strut Theorem~\thetheo:~#1};}}%
+  }%
+  \mdfsetup{innertopmargin=10pt,linecolor=blue!20,%
+    linewidth=2pt,topline=true,%
+    frametitleaboveskip=\dimexpr-\ht\strutbox\relax
+  }
+  \begin{mdframed}[]\relax%
+    \label{#2}}{\end{mdframed}}
+
+% -------------------
+% parindent
+% -------------------
+\parindent{\noindent}
+\usepackage{blindtext}
+% -------------------
+% titlepage
+% -------------------
+\title{
+  {{Kvantemekanisk harmonisk svingning og hæve-/sænkeoperatorer}}\\
+  {\small af}\\
+  {\large{Louis Clément}}\\
+  {\large Hillerød Tekniske Gymnasium}\\
+  \vspace{2cm}
+  {\includegraphics[scale=1.5]{gym.png}}
+  \vspace*{1.5cm}
+}
+\author{
+  \begin{tabular}[!h]{c}
+    \textbf{SOP fag}\\
+                Matematik A, Fysik A \\
+    \textbf{SOP vejledere}\\
+                 Mikkel Oglesby \\ Jacob Skytte Salgaard Bendtsen
+  \end{tabular}
+}
+\date{\vspace*{1cm}\textit{6. december 2020}}
+
+%\titleformat{\section}{\huge\textbf}{\titlebar{3em}{\thesection}}{0.1cm}{#1} \titleformat{\subsection}{\large\textbf}{\titlebar{5em}{\thesubsection}}{0.1cm}{#1}
+\usepackage{atbegshi}% http://ctan.org/pkg/atbegshi
+\AtBeginDocument{\AtBeginShipoutNext{\AtBeginShipoutDiscard}}
+\numberwithin{equation}{section}
+
+\begin{document}
+
+
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\tableofcontents
+
+\newpage
+\setcounter{page}{1}
+\pagenumbering{arabic}
+
+\section{Gennemgang af matematiske metoder}
+\subsection{Vektorrum}
+\begin{definition}
+  Et linært vektorrum $\mathbb V$ er defineret over et felt $\mathbb F$ (hvor vi stort set kun vil beskæftige os med $\mathbb C$). En \textit{vektor} $\ket X$ er da et element af $\mathbb V$. Disse elementer har følgende egenskaber
+  \begin{itemize}
+  \item En regel for $\ket V+\ket W$
+  \item En regel for $a\ket V, \forall a\in \mathbb F$
+  \item Distributiv skalarmultiplikation for vektorelementer\\$a(\ket V+\ket W) = a\ket V+a\ket W)$
+  \item Distributiv skalarmultiplikation for skalarelementer\\$(a+b)\ket V = a\ket V + b\ket V$
+  \item Associativ skalarmultiplikation\\$a(b\ket V) = ab\ket V$
+  \item Abelsk addition\\$\ket V+\ket W=\ket W + \ket V$
+  \item Associativ addition\\$\ket V +(\ket W + \ket Z) = (\ket V+\ket W) + \ket Z$
+  \item Nulvektor, $\ket V + \ket 0 = \ket V$ samt et inverst element der kan fremstille en nulvektor ved addition $\ket V + \ket{-V} = \ket 0$
+  \end{itemize}
+\end{definition}
+
+\begin{definition}
+  Indre produktrum er et vektorrum $\mathbb V$ med et såkaldt indre produkt. Det indre produkt mellem to vektorer $V$ og $W$ betegnes $\braket{V}{W}$ og overholder
+  \begin{itemize}
+  \item Symmetri $\braket{V}{W} = \braket{W}{V}^*$ hvorledes $^*$ betegner komplekst konjugerede for $\mathbb C$
+  \item $\braket{V}{V} \geq 0$ og $\braket{V}{V}=0\iff \ket V = \ket 0$
+  \item $\braket{V}{(a\ket W + b\ket Z)} = \braket{V}{aW+bZ} = a\braket{V}{W}+b\braket{V}{Z}$
+  \end{itemize}
+  Det indre produkt kan defineres mere eksplicit som
+  \begin{align}
+    \label{eq:1}
+    \begin{split}
+    \braket{V}{W} &= \sum_i \sum_j v_i^* w_j \delta_{ij} \\
+    &= \sum_i v^*_iw_i
+    \end{split}
+  \end{align}
+  for en ortonormal basis, derfor $\delta_{ij}=\braket{i}{j}$
+\end{definition}
+
+\subsection{Linære operatorer}
+\begin{definition}
+En linær operator $\Omgea$ eller linær transformation $T$ er en funktion $T:\mathbb V_1 \to \mathbb V_2$ således at
+\begin{align}
+  \label{eq:2}
+  T(cv_1+v_2) = c(Tv_1) + Tv_2
+\end{align}
+
+\begin{definition}
+  En kommutator er defineret som
+  \begin{align}
+    \label{eq:com}
+    [\Omega, \Lambda] = \Omega\Lambda - \Lambda \Omega
+  \end{align}
+
+\end{definition}
+
+\begin{definition}
+  Eigenpolynomiet findes som
+  \begin{align}
+    \label{eq:ei}
+    P^n(\omega) = \sum_{m=0}^n c_w \omega^m = 0
+  \end{align}
+\end{definition}
+Enhver operator i $\mathbb V^n(C)$ har $n$ eigenværdier. Eigenligningen er
+\begin{align}
+  \label{eq:kre}
+  \det(\Omega-\omega \hat I) = 0
+\end{align}
+hvor $\hat I$ er identitetsoperatoren.
+
+\begin{example}
+  Rotationsoperatoren $R\qty(\frac{1}{2} \pi e_x)$ kan repræsenteres ved en matrix således
+  \begin{align*}
+    R\qty(\frac{1}{2} \pi e_x) \leftrightarrow \mqty[1&0&0\\0&0&-1\\0&1&0]
+  \end{align*}
+  Da kan vi skrive eigenligningen som
+  \begin{align*}
+    \det(\Omega-\omega \hat I) = \mqty|1-\omega &0&0\\0&-\omega&-1\\0&1&-\omega| = 0
+  \end{align*}
+\end{example}
+Hvor eigenpolynomiet kan skrives som $(1-\omega)(\omega^2+1)=0$, og $\omega\in\qty{1,i,-i}$. 
+
+
+\end{definition}
+\newpage
+\printbibliography
+
+\end{document}
