@@ -84,6 +84,7 @@
 % -------------------
 \usepackage{setspace}
 \renewcommand{\baselinestretch}{1.5} 
+\renewcommand{\arraystretch}{0.75}
 
 % -------------------
 % box
@@ -208,33 +209,56 @@ En linær operator $\Omgea$ eller linær transformation $T$ er en funktion $T:\m
 \end{definition}
 
 \begin{definition}
-  Eigenpolynomiet findes som
-  \begin{align}
-    \label{eq:ei}
-    P^n(\omega) = \sum_{m=0}^n c_w \omega^m = 0
-  \end{align}
-\end{definition}
-Enhver operator i $\mathbb V^n(C)$ har $n$ eigenværdier. Eigenligningen er
+Enhver operator i $\mathbb V^n(C)$ har $n$ eigenværdier. Eigenværdiligningen (en omskrevet version) er
+\begin{align}
+  \label{eq:eigen}
+  (\Omega - \omega \hat I)\ket V = \ket 0
+\end{align}
+Betingelsen for eigenvektorer (som aldrig er nulvektoren) er
 \begin{align}
   \label{eq:kre}
   \det(\Omega-\omega \hat I) = 0
 \end{align}
-hvor $\hat I$ er identitetsoperatoren.
+hvor $\hat I$ er identitetsoperatoren. Vi kan omskrive eigenværdiligningen (i Matrix-repræsentation) til
+\begin{align}
+  \label{eq:eig2}
+  \sum_j (\Omega_{ij}-\omega \delta_{ij})v_j = 0
+\end{align}
+
+Sættes determinanten til 0 får vi karakterligningen (hvor $c_w$ er $\det(\Omega_{ij})\hat I\ket w$)
+\begin{align}
+  \label{eq:karklig}
+  \sum_{m=0}^n c_w \omega^m = 0
+\end{align}
+og karakterpolynomiet
+\begin{align}
+  \label{eq:ei}
+  P^n(\omega) = \sum_{m=0}^n c_w \omega^m
+\end{align}
+\end{definition}
 
 \begin{example}
   Rotationsoperatoren $R\qty(\frac{1}{2} \pi e_x)$ kan repræsenteres ved en matrix således
   \begin{align*}
     R\qty(\frac{1}{2} \pi e_x) \leftrightarrow \mqty[1&0&0\\0&0&-1\\0&1&0]
   \end{align*}
-  Da kan vi skrive eigenligningen som
+  Da kan vi skrive karakterligningen som
   \begin{align*}
     \det(\Omega-\omega \hat I) = \mqty|1-\omega &0&0\\0&-\omega&-1\\0&1&-\omega| = 0
   \end{align*}
+Hvor karakterpolynomiet kan skrives som $(1-\omega)(\omega^2+1)=0$, og $\omega\in\qty{1,i,-i}$. Sætter vi $\omega=1$ ind i (\ref{eq:eig2}) får vi
+\begin{align*}
+  \mqty[1-1&0&0\\0&0-1&-1\\0&1&0-1] \mqty[x_1\\x_2\\x_3] = \mqty[0\\0\\0] \rightarrow
+  \begin{cases}
+    0=0\\x_2-x_3=0\\x_2-x_3=0
+  \end{cases}
+\end{align*}
+Hvorfor $x_2=x_3=0$. Da $\omega=1$ er lignende $\ket 1$ får vi at enhver vektor af nedenstående form er acceptabel
+\begin{align*}
+  x_1\ket 1 \leftrightarrow \mqty[x_1\\0\\0]
+\end{align*}
 \end{example}
-Hvor eigenpolynomiet kan skrives som $(1-\omega)(\omega^2+1)=0$, og $\omega\in\qty{1,i,-i}$. 
 
-
-\end{definition}
 \newpage
 \printbibliography
 
