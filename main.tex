@@ -1,6 +1,5 @@
 \documentclass[12pt]{article}
 
-% -------------------
 % packages
 % -------------------
 \usepackage{setspace}
@@ -25,7 +24,7 @@
 \usepackage[margin=3.5cm]{geometry}
 
 \newcommand{\tss}[1]{\textsubscript{#1}}
-
+\usepackage[scr=boondoxo]{mathalfa}
 % -------------------
 % siunitx setup
 % -------------------
@@ -57,7 +56,7 @@
 \usepackage[explicit]{titlesec}
 
 % -------------------
-% biblatex
+
 % -------------------
 \usepackage[style=authoryear-ibid,backend=biber]{biblatex}
 \bibliography{sample.bib}
@@ -83,7 +82,8 @@
 % texthøjde
 % -------------------
 \usepackage{setspace}
-\renewcommand{\baselinestretch}{1.5} 
+\renewcommand{\baselinestretch}{1.25} 
+\renewcommand{\H}{\mathcal H}
 \renewcommand{\arraystretch}{0.75}
 
 % -------------------
@@ -122,10 +122,9 @@
 % titlepage
 % -------------------
 \title{
-  {{Kvantemekanisk harmonisk svingning og hæve-/sænkeoperatorer}}\\
-  {\small af}\\
+  {{Hæve-/sænkeoperatorer og hydrogenlampe}}\\
   {\large{Louis Clément}}\\
-  {\large Hillerød Tekniske Gymnasium}\\
+  {\large Hillerød Tekniske Skole}\\
   \vspace{2cm}
   {\includegraphics[scale=1.5]{gym.png}}
   \vspace*{1.5cm}
@@ -158,46 +157,67 @@
 \pagenumbering{arabic}
 
 \section{Gennemgang af matematiske metoder}
-\subsection{Vektorrum}
+\subsection{Hilbertrum}
+
 \begin{definition}
-  Et linært vektorrum $\mathbb V$ er defineret over et felt $\mathbb F$ (hvor vi stort set kun vil beskæftige os med $\mathbb C$). En \textit{vektor} $\ket X$ er da et element af $\mathbb V$. Disse elementer har følgende egenskaber
-  \begin{itemize}
-  \item En regel for $\ket V+\ket W$
-  \item En regel for $a\ket V, \forall a\in \mathbb F$
-  \item Distributiv skalarmultiplikation for vektorelementer\\$a(\ket V+\ket W) = a\ket V+a\ket W)$
-  \item Distributiv skalarmultiplikation for skalarelementer\\$(a+b)\ket V = a\ket V + b\ket V$
-  \item Associativ skalarmultiplikation\\$a(b\ket V) = ab\ket V$
-  \item Abelsk addition\\$\ket V+\ket W=\ket W + \ket V$
-  \item Associativ addition\\$\ket V +(\ket W + \ket Z) = (\ket V+\ket W) + \ket Z$
-  \item Nulvektor, $\ket V + \ket 0 = \ket V$ samt et inverst element der kan fremstille en nulvektor ved addition $\ket V + \ket{-V} = \ket 0$
-  \end{itemize}
+  Et Hilbertrum $\mathcal H$ er et komplet vektorrum over et felt $\mathbb F$ med associeret indre produkt. Vi beskæftiger os med rum, hvori det gælder at
+  \begin{align*}
+    \braket{\psi}{\psi} = \int \psi^*(x)\psi(x) ~ dx < \infty
+  \end{align*}
+  for $\ket \psi \in \mathcal H$. Vi kan konstruere et $\infty$-dimensionelt Hilbertrum ved at overveje et kontinuert basis med elementerne $\ket a$ navngivet med en kontinuer variabel $a$, normaliseret således at
+  \begin{align}
+    \label{eq:con}
+    \braket{a}{\tilde a} = \delta(a-\tilde a)
+  \end{align}
+  hvilket betyder vi kan skrive
+  \begin{align}
+    \label{eq:sw}
+    \ket \psi = \int \psi(a)\ket a~da
+  \end{align}
+  
+\end{definition}
+
+
+\begin{definition}
+  En \textit{ket} vektor $\ket V$ betegner en vektor af et abstrakt
+vektorrum. I et endeligdimensionelt vektorrum kan en ket vektor
+repræsenteres som
+  \begin{align}
+    \label{eq:colv}
+    \ket V \leftrightarrow \mqty[v_1\\v_2\\\vdots\\ v_n]
+  \end{align}
 \end{definition}
 
 \begin{definition}
-  Indre produktrum er et vektorrum $\mathbb V$ med et såkaldt indre produkt. Det indre produkt mellem to vektorer $V$ og $W$ betegnes $\braket{V}{W}$ og overholder
-  \begin{itemize}
-  \item Symmetri $\braket{V}{W} = \braket{W}{V}^*$ hvorledes $^*$ betegner komplekst konjugerede for $\mathbb C$
-  \item $\braket{V}{V} \geq 0$ og $\braket{V}{V}=0\iff \ket V = \ket 0$
-  \item $\braket{V}{(a\ket W + b\ket Z)} = \braket{V}{aW+bZ} = a\braket{V}{W}+b\braket{V}{Z}$
-  \end{itemize}
-  Det indre produkt kan defineres mere eksplicit som
+  En \textit{bra} vektor $\bra V$ betegner en et element af dual
+vektorrum (dualrum). Den kan repræsenteres som det transponerede
+konjugat af den ket vektor den er dual på
   \begin{align}
-    \label{eq:1}
-    \begin{split}
-    \braket{V}{W} &= \sum_i \sum_j v_i^* w_j \delta_{ij} \\
-    &= \sum_i v^*_iw_i
-    \end{split}
+    \label{eq:ket}
+    \ket V \leftrightarrow \mqty[v_1\\v_2\\\vdots\\v_n]
+\leftrightarrow \mqty[v_1^*&v_2^*&\cdots&v_n^*]
+\leftrightarrow \bra V
   \end{align}
-  for en ortonormal basis, derfor $\delta_{ij}=\braket{i}{j}$
+  Dualrum $\mathcal H^*$ består af linære afbildninger $\H^*\to \H$,
+defineret med det indre produkt for $\langle \phi,\cdot \rangle\in
+\H^$ som $\langle \phi,\cdot\rangle : \psi \mapsto
+\braket{\phi}{\psi}$.
 \end{definition}
+
 
 \subsection{Linære operatorer}
 \begin{definition}
-En linær operator $\Omgea$ eller linær transformation $T$ er en funktion $T:\mathbb V_1 \to \mathbb V_2$ således at
+En linær operator $\Omgea$ eller linær transformation $T$ er en
+funktion $T:\mathbb V_1 \to \mathbb V_2$ således at
 \begin{align}
   \label{eq:2}
   T(cv_1+v_2) = c(Tv_1) + Tv_2
 \end{align}
+Igennem denne tekst vil de kun repræsenteres som matricer $M$, således
+at $T(x)=Mx$. En linær operator kan i øvrigt repræsenteres som $\ket
+\psi \bra \phi \in \mathcal H \otimes \mathcal H^*$.
+
+\end{definition}
 
 \begin{definition}
   En kommutator er defineret som
@@ -205,27 +225,34 @@ En linær operator $\Omgea$ eller linær transformation $T$ er en funktion $T:\m
     \label{eq:com}
     [\Omega, \Lambda] = \Omega\Lambda - \Lambda \Omega
   \end{align}
+  hvor $\Omega,\Lambda \in \H\otimes \H^*$. Hviss. $[\Omega, \Lambda]
+= 0$ kommuterer operatorerne.
 
 \end{definition}
 
 \begin{definition}
-Enhver operator i $\mathbb V^n(C)$ har $n$ eigenværdier. Eigenværdiligningen (en omskrevet version) er
+Enhver operator i $\mathbb V^n(C)$ har $n$
+eigenværdier. Eigenværdiligningen (en omskrevet version) er
 \begin{align}
   \label{eq:eigen}
   (\Omega - \omega \hat I)\ket V = \ket 0
 \end{align}
-Betingelsen for eigenvektorer (som aldrig er nulvektoren) er
+Betingelsen for eigenvektoren er
 \begin{align}
   \label{eq:kre}
   \det(\Omega-\omega \hat I) = 0
 \end{align}
-hvor $\hat I$ er identitetsoperatoren. Vi kan omskrive eigenværdiligningen (i Matrix-repræsentation) til
+hvor $\hat I$ er identitetsoperatoren. Vi kan omskrive
+eigenværdiligningen (ved at projicere den på en basis $\bra i$) til
 \begin{align}
   \label{eq:eig2}
-  \sum_j (\Omega_{ij}-\omega \delta_{ij})v_j = 0
+  \begin{split}
+   \bra i \Omega - \omega\hat I \ket V = 0 \\
+   \sum_j (\Omega_{ij}-\omega \delta_{ij})v_j = 0 
+  \end{split}
 \end{align}
 
-Sættes determinanten til 0 får vi karakterligningen (hvor $c_w$ er $\det(\Omega_{ij})\hat I\ket w$)
+Sættes determinanten til 0 får vi karakterligningen 
 \begin{align}
   \label{eq:karklig}
   \sum_{m=0}^n c_w \omega^m = 0
@@ -237,27 +264,24 @@ og karakterpolynomiet
 \end{align}
 \end{definition}
 
-\begin{example}
-  Rotationsoperatoren $R\qty(\frac{1}{2} \pi e_x)$ kan repræsenteres ved en matrix således
-  \begin{align*}
-    R\qty(\frac{1}{2} \pi e_x) \leftrightarrow \mqty[1&0&0\\0&0&-1\\0&1&0]
-  \end{align*}
-  Da kan vi skrive karakterligningen som
-  \begin{align*}
-    \det(\Omega-\omega \hat I) = \mqty|1-\omega &0&0\\0&-\omega&-1\\0&1&-\omega| = 0
-  \end{align*}
-Hvor karakterpolynomiet kan skrives som $(1-\omega)(\omega^2+1)=0$, og $\omega\in\qty{1,i,-i}$. Sætter vi $\omega=1$ ind i (\ref{eq:eig2}) får vi
+\section{Kvantemekanisk harmonisk svingning}
+Tilstanden af et partikel er beskrevet med en tilstandsvektor $\ket
+\psi\in \mathcal H$.
+\subsection{Schrödinger-ligningen}
+Vi kan skrive den tidsuafhængige Schrödinger-ligning (TISE) som
+\begin{align}
+  \label{eq:schr}
+  \hat H \ket \psi = E \ket \psi 
+\end{align}
+Hvor $\hat H$ er Hamiltonoperatoren. Fra den klassiske formidling af energi, får vi at $\hat H$ kan repræsenteres som
 \begin{align*}
-  \mqty[1-1&0&0\\0&0-1&-1\\0&1&0-1] \mqty[x_1\\x_2\\x_3] = \mqty[0\\0\\0] \rightarrow
-  \begin{cases}
-    0=0\\x_2-x_3=0\\x_2-x_3=0
-  \end{cases}
+  \hat H = \frac{\hbar ^2}{2m} \pdv[2]{x}+V(x)
 \end{align*}
-Hvorfor $x_2=x_3=0$. Da $\omega=1$ er lignende $\ket 1$ får vi at enhver vektor af nedenstående form er acceptabel
+Hvilket giver vi kan skrive SE som
 \begin{align*}
-  x_1\ket 1 \leftrightarrow \mqty[x_1\\0\\0]
+  \frac{\hbar^2}{2m} \pdv[2]{x}\psi(x)+V(x)\psi(x) = i\hbar \pdv{t} \psi(x)
 \end{align*}
-\end{example}
+
 
 \newpage
 \printbibliography
